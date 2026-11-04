@@ -142,6 +142,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-
 .count{font-family:var(--latin);font-size:15px;letter-spacing:.12em;color:var(--mute);margin-right:8px;font-variant-numeric:tabular-nums}
 .tb{height:36px;padding:0 14px;font-size:16px;letter-spacing:.06em;color:var(--ink-2);border-radius:18px}
 .tb.on{background:var(--ink);color:var(--paper)}
+.tb.fs{padding:0 10px;display:inline-flex;align-items:center}
+.tb.fs svg{width:20px;height:20px}
 .tb.price{font-family:var(--latin);letter-spacing:.1em}
 .lang{display:flex;margin-left:6px;border:1px solid var(--line);border-radius:18px;overflow:hidden}
 .lang button{height:34px;padding:0 13px;font-family:var(--latin);font-size:15px;letter-spacing:.08em;color:var(--ink-2)}
@@ -392,6 +394,7 @@ html[lang=en] .opener .lead{letter-spacing:0}
   <button class="home" id="home" type="button" aria-label="Home"><img id="logo" alt="INCOON"></button><span class="pill" id="pill"></span>
   <div class="sp"></div>
   <span class="count" id="count"></span>
+  <button class="tb fs" id="bFull" type="button" hidden aria-label="Full screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
   <button class="tb" id="bIdx" type="button"></button>
   <button class="tb" id="bNotes" type="button"></button>
   <button class="tb price" id="bPrice" type="button">NT$</button>
@@ -1273,6 +1276,14 @@ $('#bNotes').onclick=()=>notes(!$('#sheet').classList.contains('on'));
 $('#sheet').onclick=e=>{ if(!e.target.closest('.pn')) notes(false); };
 $('#bIdx').onclick=()=>$('#idx').classList.add('on'); $('#idxX').onclick=()=>$('#idx').classList.remove('on');
 $('#idxG').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b){ $('#idx').classList.remove('on'); go(+b.dataset.i); }});
+/* full screen: hidden when already opened from the home screen or when the browser can't do it */
+(function(){ const de=document.documentElement, rfs=de.requestFullscreen||de.webkitRequestFullscreen;
+  const standalone=window.matchMedia&&matchMedia('(display-mode: standalone), (display-mode: fullscreen)').matches||navigator.standalone;
+  const b=$('#bFull'); if(!rfs||standalone) return; b.hidden=false;
+  const isFs=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
+  const sync=()=>b.classList.toggle('on',isFs());
+  b.onclick=()=>{ if(isFs()){ (document.exitFullscreen||document.webkitExitFullscreen).call(document); } else { try{ const r=rfs.call(de); if(r&&r.catch) r.catch(()=>{}); }catch(e){} } };
+  document.addEventListener('fullscreenchange',sync); document.addEventListener('webkitfullscreenchange',sync); })();
 $('#bPrice').onclick=()=>{ priceOn=!priceOn; document.body.classList.toggle('price-on',priceOn); $('#bPrice').classList.toggle('on',priceOn); };
 $('#track').addEventListener('click',e=>{
   if(moved) return;
