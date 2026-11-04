@@ -1,0 +1,22 @@
+{
+ "name": "INCOON Sofa Catalogue",
+ "short_name": "INCOON",
+ "start_url": "./",
+ "scope": "./",
+ "display": "fullscreen",
+ "orientation": "landscape",
+ "background_color": "#F2F0EC",
+ "theme_color": "#F2F0EC",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  }
+ ]
+}
